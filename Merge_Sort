@@ -1,0 +1,111 @@
+Merge sort-----> Merge Sort is a divide and conquer sorting algorithm that splits an array into smaller subarrays, sorts them, and then merges them back together in sorted order.
+
+Steps of Merge Sort
+---------------------
+Divide: Recursively divide the array into two halves until each half contains a single element.
+Conquer: Sort the divided parts (they are already sorted when they have one element).
+Merge: Merge the sorted halves back together in the correct order.
+
+Example
+-----------
+Let's sort the array:
+[3, 5, 1, 2, 7, 4, 3, 0]
+
+Step 1: Divide
+---------------
+We keep splitting the array until each part has only one element.
+
+[3, 5, 1, 2, 7, 4, 3, 0]
+     /                 \
+[3, 5, 1, 2]        [7, 4, 3, 0]
+   /        \         /         \
+[3, 5]    [1, 2]   [7, 4]     [3, 0]
+ /   \     /   \    /   \      /   \
+[3]  [5]  [1]  [2] [7]  [4]  [3]  [0]
+
+Each element is now alone (trivially sorted).
+
+Step 2: Merge
+---------------
+We now start merging the small parts back together in sorted order.
+
+First Level Merge ------>
+[3]  [5]  →  [3, 5]
+[1]  [2]  →  [1, 2]
+[7]  [4]  →  [4, 7]
+[3]  [0]  →  [0, 3]
+
+Second Level Merge------->
+[3, 5]  [1, 2]  →  [1, 2, 3, 5]
+[4, 7]  [0, 3]  →  [0, 3, 4, 7]
+
+Final Merge------->
+[1, 2, 3, 5]  [0, 3, 4, 7]  →  [0, 1, 2, 3, 3, 4, 5, 7]
+
+Final Sorted Array: [0, 1, 2, 3, 3, 4, 5, 7]
+
+Time Complexity Analysis
+------------------------
+Splitting the array takes O(log N) (since we halve it each time).
+
+Merging takes O(N) at each level.
+
+Since there are O(log N) levels, the total time complexity is: O(NlogN)
+
+Space Complexity
+--------------------
+Merge Sort requires extra space for temporary arrays when merging.
+
+Recursive Call Stack: O(log N) (depth of recursion)
+Temporary Merging Array: O(N)
+Total Space Complexity: O(N)
+
+
+code :
+--------
+public class MergeSort {
+	public static void main(String[] args) {
+		int[] array = { 3, 5, 1, 2, 7, 4, 3, 0 };
+		mergeSort(array, 0, array.length -1);
+		for (int i : array) {
+			System.out.print(i + " ");
+		}
+	}
+
+	private static void mergeSort(int[] array, int left, int right) {
+		if (left>=right)return;
+			int mid = left + (right - left) / 2;
+			mergeSort(array, left, mid);
+			mergeSort(array, mid + 1, right);
+			merge(array, left, mid, right);
+
+	}
+
+	private static void merge(int[] array, int left, int mid, int right) {
+		int[] merged = new int[right - left + 1];
+
+		int idx1 = left;
+		int idx2 = mid + 1;
+		int x = 0;
+
+		while (idx1 <= mid && idx2 <= right) {
+			if (array[idx1] <= array[idx2]) {
+				merged[x++] = array[idx1++];
+			} else {
+				merged[x++] = array[idx2++];
+			}
+		}
+		while (idx1 <= mid) {
+			merged[x++] = array[idx1++];
+		}
+		while (idx2 <= right) {
+			merged[x++] = array[idx2++];
+		}
+		
+		for (int i = 0; i < merged.length; i++) {
+            array[left + i] = merged[i];
+        }
+
+	}
+
+}
